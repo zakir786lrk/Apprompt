@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: android-${{ github.workflow }}-${{ github.ref }}
@@ -70,6 +70,22 @@ jobs:
           path: dist/
           if-no-files-found: error
           retention-days: 14
+
+      - name: Publish Release APK
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 # v2.0.8
+        with:
+          tag_name: v1.0.5-apprompt
+          name: Apprompt v1.0.5 Preview
+          body: |
+            ## Apprompt: AI Vibecoded Applets for Android
+            - ✨ AI Vibecoding Studio powered by Google Gemini API
+            - ⚡ Dynamic model selector (Gemini 2.5 Flash, Gemini 2.5 Pro, etc.)
+            - 📱 Quick Settings Tile Manager (bind applets to 4 QS tiles)
+            - 🏠 Standalone Home Screen Pinned Shortcuts
+            - 🎨 Revamped 5-tab Material 3 Expressive UI
+          files: dist/*.apk
+        continue-on-error: true
 
       - name: Upload build reports
         if: always()

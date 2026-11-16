@@ -864,11 +864,11 @@ object Texts {
     )
 }
 fun Context.tr(key: String, vararg args: Any): String {
-    val id = Texts.ids[key] ?: R.string.ui_err_generic
+    val id = Texts.ids[key] ?: return key.replace('_', ' ').replaceFirstChar { it.uppercase() }
     return if (args.isEmpty()) getString(id) else getString(id, *args)
 }
 @Composable fun t(key: String, vararg args: Any): String {
-    val id = Texts.ids[key] ?: R.string.ui_err_generic
+    val id = Texts.ids[key] ?: return key.replace('_', ' ').replaceFirstChar { it.uppercase() }
     return if (args.isEmpty()) stringResource(id) else stringResource(id, *args)
 }
 fun Context.describe(error: Throwable): String = when (error) {
